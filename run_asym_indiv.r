@@ -6,10 +6,11 @@ setwd('~/thib/projects/andrea_stan/')
 ## * Prepare data
 subject = 1
 data <- read_csv('ares_expt1_bhv.csv')
-data <- data %>% filter(subject == subject) %>%
+data <- data %>% dplyr::filter(subject == 1) %>%
     mutate(SOAactual = SOAactual * 10)
 
 T <- nrow(data)
+
 data_list <- list(
     T        = T,
     std_dev  = sd(data$SOAactual),
@@ -21,8 +22,8 @@ data_list <- list(
 modelFile <- '~/thib/projects/andrea_stan/asym_indiv.stan'
 fit <- stan(modelFile,
             data = data_list,
-            iter = 4000,
-            warmup = 2000,
+            iter = 20,
+            warmup = 10,
             chains = 4,
             cores = 4,
             init =  'random',

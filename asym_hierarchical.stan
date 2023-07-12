@@ -27,10 +27,10 @@ transformed parameters {
   vector[N]  m_plus;
   vector<lower = 0>[N]  s_min;
   vector<lower=  0>[N]  s_plus;
-  m_min = mu[1] + sigma[1]*m_min_raw;
-  m_plus = mu[2] + sigma[2]*m_plus_raw;
-  s_min = Phi_approx(mu[3] + sigma[3]*s_min_raw);
-  s_plus = Phi_approx(mu[4] + sigma[4]*s_plus_raw); 
+  m_min = mu[1] + sigma[1]*m_min_raw; //   m_min_raw~normal(0,1) =>  m_min~normal(mu[1],sigma[1])
+  m_plus = mu[2] + sigma[2]*m_plus_raw;  //  m_plus_raw~normal(0,1) =>  m_plus~normal(mu[2],sigma[2])
+  s_min = Phi_approx(mu[3] + sigma[3]*s_min_raw); //  s_min_raw~normal(0,1) => s_min \in [0,1]
+  s_plus = Phi_approx(mu[4] + sigma[4]*s_plus_raw); //  s_plus_raw~normal(0,1) => s_plus \in [0,1]
 }
 
 
@@ -40,9 +40,9 @@ model {
   mu[2]  ~ normal(10, 10);
   mu[3]  ~ normal(0, 1);
   mu[4]  ~ normal(0, 1);
-  sigma ~ normal(0, 1);
+  sigma ~ student_t(4,0,1);
   
-  // individual parameters
+  // individual parameters for Matt Trick
   m_min_raw  ~ normal(0, 1);
   m_plus_raw  ~ normal(0, 1);  
   s_min_raw  ~ normal(0, 1);
